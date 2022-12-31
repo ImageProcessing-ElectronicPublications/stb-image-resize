@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project(stbresize)
+add_compile_options(-O3)
+add_executable(stbresize src/stbresize.c)
+target_link_libraries(stbresize m)

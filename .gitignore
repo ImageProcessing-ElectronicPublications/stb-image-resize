@@ -1,0 +1,10 @@
+build/
+stbresize
+Makefile
+CMakeCache.txt
+.o
+.cmake
+.vscode
+.cache
+.clangd
+a.out
