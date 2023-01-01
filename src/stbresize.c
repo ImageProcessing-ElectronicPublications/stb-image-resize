@@ -3,44 +3,65 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "image-stb.h"
 #include "bicubic.h"
 #include "biakima.h"
+
+#define RESIZE_VERSION "1.1"
+
+void resize_usage(char* prog, float ratio, int method)
+{
+    printf("StbResize version %s.\n", RESIZE_VERSION);
+    printf("usage: %s [options] image_in out.png\n", prog);
+    printf("options:\n");
+    printf("  -m NUM    method: 0 - bicubic, 1 - biakima, (default %d)\n", method);
+    printf("  -r N.M    sample ratio (default %f)\n", ratio);
+    printf("  -h        show this help message and exit\n");
+}
 
 int main(int argc, char **argv)
 {
     float ratio = 1.0f;
     int method = 0;
-    if (argc < 3)
+    int fhelp = 0;
+    int opt;
+    while ((opt = getopt(argc, argv, ":m:r:h")) != -1)
     {
-        fprintf(stderr, "Need 1 argument\n");
-        fprintf(stderr, "Usage: %s image_in out.png [ratio] [method]\n", argv[0]);
-        fprintf(stderr, "method:\n0 - bicubic\n1 - biakima\n");
+        switch(opt)
+        {
+        case 'm':
+            method = atoi(optarg);
+            break;
+        case 'r':
+            ratio = atof(optarg);
+            if (ratio < 0.0f)
+            {
+                fprintf(stderr, "Bad argument\n");
+                fprintf(stderr, "ratio = %f\n", ratio);
+                return 1;
+            }
+            break;
+        case 'h':
+            fhelp = 1;
+            break;
+        case ':':
+            fprintf(stderr, "ERROR: option needs a value\n");
+            return 2;
+            break;
+        case '?':
+            fprintf(stderr, "ERROR: unknown option: %c\n", optopt);
+            return 3;
+            break;
+        }
+    }
+    if(optind + 2 > argc || fhelp)
+    {
+        resize_usage(argv[0], ratio, method);
         return 0;
     }
-    if (argc > 3)
-    {
-        ratio = atof(argv[3]);
-        if (ratio < 0.0f)
-        {
-            fprintf(stderr, "Bad argument\n");
-            fprintf(stderr, "ratio = %f\n", ratio);
-            return 1;
-        }
-    }
-    if (argc > 4)
-    {
-        method = atoi(argv[4]);
-        if (method < 0 && method > 1)
-        {
-            fprintf(stderr, "Bad argument\n");
-            fprintf(stderr, "method = %d\n", method);
-            return 1;
-        }
-    }
-
-    const char *src_name = argv[1];
-    const char *dst_name = argv[2];
+    const char *src_name = argv[optind];
+    const char *dst_name = argv[optind + 1];
 
     int height, width, channels;
 

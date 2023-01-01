@@ -1,0 +1,41 @@
+.TH "StbResize" 1 1.1 "1 Jan 2023" "User Manual"
+
+.SH NAME
+stbresize
+
+.SH DESCRIPTION
+The image is scaled using interpolation:
+  - bicubic (4x4)
+  - biakima (6x6) 
+
+.SH SYNOPSIS
+stbresize [options] image_in out.png
+
+.SH OPTIONS
+.TP
+-m NUM
+method: 0 - bicubic, 1 - biakima, (default 0)
+.TP
+-r N.N
+sample ratio (default 1.000000)
+.TP
+-h
+show this help message and exit
+
+.SH EXAMPLE
+stbresize -r 2 data.png data.out.png 
+ 
+ Load: data.png
+ image: 1873x1000:3
+ resize: 3746x2000:3
+ method: bicubic
+ Save png: data.out.png
+
+.SH COPYRIGHT
+This is free and unencumbered software released into the public domain.
+
+.SH SEE ALSO
+convert(1), gm(1), imagew(1)
+
+.SH CONTACTS
+Website: https://github.com/ImageProcessing-ElectronicPublications/stb-image-resize

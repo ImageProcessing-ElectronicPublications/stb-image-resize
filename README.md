@@ -47,7 +47,7 @@ The first and second parameters specify the paths to the image and the result {P
 - `bicubic.h` - bicubic image scaling
 - `image-stb.h` - API [stb](https://github.com/nothings/stb.git)
 - `stb/` - [stb](https://github.com/nothings/stb.git)
-- `resize-stb.c` - CLI program.
+- `stbresize.c` - CLI program.
 
 ## image scaling
 
