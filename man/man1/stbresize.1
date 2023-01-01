@@ -1,4 +1,4 @@
-.TH "StbResize" 1 1.2 "1 Jan 2023" "User Manual"
+.TH "StbResize" 1 1.3 "1 Jan 2023" "User Manual"
 
 .SH NAME
 stbresize
@@ -17,8 +17,11 @@ stbresize [options] image_in out.png
 -m NUM
 method: 0 - bicubic, 1 - biakima, -1 - biline (default 0)
 .TP
+-p N.N
+part prefilter RIS (default 0.0)
+.TP
 -r N.N
-sample ratio (default 1.000000)
+sample ratio (default 1.0)
 .TP
 -h
 show this help message and exit

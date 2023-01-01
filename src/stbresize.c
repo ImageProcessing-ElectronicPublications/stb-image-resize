@@ -8,15 +8,17 @@
 #include "bicubic.h"
 #include "biakima.h"
 #include "biline.h"
+#include "ris.h"
 
-#define RESIZE_VERSION "1.2"
+#define RESIZE_VERSION "1.3"
 
-void resize_usage(char* prog, float ratio, int method)
+void resize_usage(char* prog, float ratio, int method, float pris)
 {
     printf("StbResize version %s.\n", RESIZE_VERSION);
     printf("usage: %s [options] image_in out.png\n", prog);
     printf("options:\n");
     printf("  -m NUM    method: 0 - bicubic, 1 - biakima, -1 - biline (default %d)\n", method);
+    printf("  -p N.M    part prefilter RIS (default %f)\n", pris);
     printf("  -r N.M    sample ratio (default %f)\n", ratio);
     printf("  -h        show this help message and exit\n");
 }
@@ -25,14 +27,18 @@ int main(int argc, char **argv)
 {
     float ratio = 1.0f;
     int method = 0;
+    float pris = 0.0f, vris = 0.0f;
     int fhelp = 0;
     int opt;
-    while ((opt = getopt(argc, argv, ":m:r:h")) != -1)
+    while ((opt = getopt(argc, argv, ":m:p:r:h")) != -1)
     {
         switch(opt)
         {
         case 'm':
             method = atoi(optarg);
+            break;
+        case 'p':
+            pris = atof(optarg);
             break;
         case 'r':
             ratio = atof(optarg);
@@ -58,7 +64,7 @@ int main(int argc, char **argv)
     }
     if(optind + 2 > argc || fhelp)
     {
-        resize_usage(argv[0], ratio, method);
+        resize_usage(argv[0], ratio, method, pris);
         return 0;
     }
     const char *src_name = argv[optind];
@@ -108,17 +114,55 @@ int main(int argc, char **argv)
     if (method == -1)
     {
         printf("method: biline\n");
-        ResizeImageBiLine(data, height, width, channels, ratio, resize_data);
+        ResizeImageBiLine(data, height, width, channels, resize_height, resize_width, resize_data);
     }
     else if (method == 1)
     {
         printf("method: biakima\n");
-        ResizeImageBiAkima(data, height, width, channels, ratio, resize_data);
+        ResizeImageBiAkima(data, height, width, channels, resize_height, resize_width, resize_data);
     }
     else
     {
         printf("method: bicubic\n");
-        ResizeImageBiCubic(data, height, width, channels, ratio, resize_data);
+        ResizeImageBiCubic(data, height, width, channels, resize_height, resize_width, resize_data);
+    }
+
+    if (pris > 0.0f)
+    {
+        printf("RIS prefilter... ");
+        unsigned char* ris_data = NULL;
+        if (!(ris_data = (unsigned char*)malloc(height * width * channels * sizeof(unsigned char))))
+        {
+            fprintf(stderr, "ERROR: not use memmory\n");
+            return 1;
+        }
+        if (method == -1)
+        {
+            ResizeImageBiLine(resize_data, resize_height, resize_width, channels, height, width, ris_data);
+        }
+        else if (method == 1)
+        {
+            ResizeImageBiAkima(resize_data, resize_height, resize_width, channels, height, width, ris_data);
+        }
+        else
+        {
+            ResizeImageBiCubic(resize_data, resize_height, resize_width, channels, height, width, ris_data);
+        }
+        vris = ImageReFilter(data, ris_data, height, width, channels, pris);
+        printf(" value: %f\n", vris);
+        if (method == -1)
+        {
+            ResizeImageBiLine(ris_data, height, width, channels, resize_height, resize_width, resize_data);
+        }
+        else if (method == 1)
+        {
+            ResizeImageBiAkima(ris_data, height, width, channels, resize_height, resize_width, resize_data);
+        }
+        else
+        {
+            ResizeImageBiCubic(ris_data, height, width, channels, resize_height, resize_width, resize_data);
+        }
+        free(ris_data);
     }
 
     printf("Save png: %s\n", dst_name);

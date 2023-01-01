@@ -35,20 +35,19 @@ void BiLineFilter(unsigned char *pix, unsigned char *src, int height, int width,
     }
 }
 
-
-void ResizeImageBiLine(unsigned char *src, int height, int width, int channels, float ratio, unsigned char *res)
+void ResizeImageBiLine(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
 {
-    int resize_height = (int)((float)height * ratio + 0.5f);
-    int resize_width = (int)((float)width * ratio + 0.5f);
+    float ratio_height = (float)resize_height / (float)height;
+    float ratio_width = (float)resize_width / (float)width;
     unsigned char pix[8];
 
     size_t k = 0;
     for (int i = 0; i < resize_height; i++)
     {
-        float src_y = ((float)i + 0.5f) / ratio - 0.5f;
+        float src_y = ((float)i + 0.5f) / ratio_height - 0.5f;
         for (int j = 0; j < resize_width; j++)
         {
-            float src_x = ((float)j + 0.5f) / ratio - 0.5f;
+            float src_x = ((float)j + 0.5f) / ratio_width - 0.5f;
             BiLineFilter(pix, src, height, width, channels, src_y, src_x);
             for (int d = 0; d < channels; d++)
             {

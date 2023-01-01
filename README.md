@@ -48,6 +48,7 @@ The first and second parameters specify the paths to the image and the result {P
 - `bicubic.h` - bicubic image scaling
 - `biline.h` - biline image scaling
 - `image-stb.h` - API [stb](https://github.com/nothings/stb.git)
+- `ris.h` - Reverse Interpolate Scale (RIS): prefilter
 - `stb/` - [stb](https://github.com/nothings/stb.git)
 - `stbresize.c` - CLI program.
 
