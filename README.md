@@ -4,6 +4,7 @@ The image is scaled using interpolation:
 
 - bicubic (4x4)
 - biakima (6x6) 
+- biline (2x2) 
 
 ## build
 
@@ -36,15 +37,16 @@ $ make
 ```
 ## use
 
-The first and second parameters specify the paths to the image and the result {PNG}. The third parameter specifies the scale of the image. The fourth specifies the scaling method {0 - bicubic, 1 - biakima}.
+The first and second parameters specify the paths to the image and the result {PNG}. The third parameter specifies the scale of the image. The fourth specifies the scaling method {0 - bicubic, 1 - biakima, -1 - biline}.
 ```shell
-./stbresize $IMAGE_PATH $IMAGE_PATH.out.png 4
+./stbresize -r 4 ${IMAGE_PATH} ${IMAGE_PATH}.out.png
 ```
 
 ## structure
 
 - `biakima.h` - biakima image scaling
 - `bicubic.h` - bicubic image scaling
+- `biline.h` - biline image scaling
 - `image-stb.h` - API [stb](https://github.com/nothings/stb.git)
 - `stb/` - [stb](https://github.com/nothings/stb.git)
 - `stbresize.c` - CLI program.

@@ -7,15 +7,16 @@
 #include "image-stb.h"
 #include "bicubic.h"
 #include "biakima.h"
+#include "biline.h"
 
-#define RESIZE_VERSION "1.1"
+#define RESIZE_VERSION "1.2"
 
 void resize_usage(char* prog, float ratio, int method)
 {
     printf("StbResize version %s.\n", RESIZE_VERSION);
     printf("usage: %s [options] image_in out.png\n", prog);
     printf("options:\n");
-    printf("  -m NUM    method: 0 - bicubic, 1 - biakima, (default %d)\n", method);
+    printf("  -m NUM    method: 0 - bicubic, 1 - biakima, -1 - biline (default %d)\n", method);
     printf("  -r N.M    sample ratio (default %f)\n", ratio);
     printf("  -h        show this help message and exit\n");
 }
@@ -104,7 +105,12 @@ int main(int argc, char **argv)
         return 2;
     }
 
-    if (method == 1)
+    if (method == -1)
+    {
+        printf("method: biline\n");
+        ResizeImageBiLine(data, height, width, channels, ratio, resize_data);
+    }
+    else if (method == 1)
     {
         printf("method: biakima\n");
         ResizeImageBiAkima(data, height, width, channels, ratio, resize_data);
