@@ -9,8 +9,9 @@
 #include "biakima.h"
 #include "biline.h"
 #include "ris.h"
+#include "gsample.h"
 
-#define RESIZE_VERSION "1.4"
+#define RESIZE_VERSION "1.5"
 
 void resize_usage(char* prog, int resize_height, int resize_width, float ratio, int method, float pris)
 {
@@ -19,7 +20,7 @@ void resize_usage(char* prog, int resize_height, int resize_width, float ratio, 
     printf("options:\n");
     printf("  -H NUM    resize height (default %d)\n", resize_height);
     printf("  -W NUM    resize width (default %d)\n", resize_width);
-    printf("  -m NUM    method: 0 - bicubic, 1 - biakima, -1 - biline (default %d)\n", method);
+    printf("  -m NUM    method: 0 - bicubic, 1 - biakima, -1 - biline, -2 - gsample (default %d)\n", method);
     printf("  -p N.M    part prefilter RIS (default %f)\n", pris);
     printf("  -r N.M    sample ratio (default %f)\n", ratio);
     printf("  -h        show this help message and exit\n");
@@ -141,7 +142,12 @@ int main(int argc, char **argv)
         return 2;
     }
 
-    if (method == -1)
+    if (method == -2)
+    {
+        printf("method: gsample\n");
+        ResizeImageGSample(data, height, width, channels, resize_height, resize_width, resize_data);
+    }
+    else if (method == -1)
     {
         printf("method: biline\n");
         ResizeImageBiLine(data, height, width, channels, resize_height, resize_width, resize_data);
@@ -166,21 +172,14 @@ int main(int argc, char **argv)
             fprintf(stderr, "ERROR: not use memmory\n");
             return 1;
         }
-        if (method == -1)
-        {
-            ResizeImageBiLine(resize_data, resize_height, resize_width, channels, height, width, ris_data);
-        }
-        else if (method == 1)
-        {
-            ResizeImageBiAkima(resize_data, resize_height, resize_width, channels, height, width, ris_data);
-        }
-        else
-        {
-            ResizeImageBiCubic(resize_data, resize_height, resize_width, channels, height, width, ris_data);
-        }
+        ResizeImageGSample(resize_data, resize_height, resize_width, channels, height, width, ris_data);
         vris = ImageReFilter(data, ris_data, height, width, channels, pris);
         printf(" value: %f\n", vris);
-        if (method == -1)
+        if (method == -2)
+        {
+            ResizeImageGSample(ris_data, height, width, channels, resize_height, resize_width, resize_data);
+        }
+        else if (method == -1)
         {
             ResizeImageBiLine(ris_data, height, width, channels, resize_height, resize_width, resize_data);
         }

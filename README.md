@@ -6,6 +6,10 @@ The image is scaled using interpolation:
 - biakima (6x6) 
 - biline (2x2) 
 
+The image is resampled using:
+
+  - gsample (3x3)
+
 ## build
 
 ### load submodules
@@ -37,7 +41,7 @@ $ make
 ```
 ## use
 
-The first and second parameters specify the paths to the image and the result {PNG}. The `-H`, `-W` and `-r` options set the resulting dimensions. If `-H` or `-W` is given, then `-r` is ignored. The `-m` option specifies the scaling method {0 - bicubic, 1 - biakima, -1 - biline}. The `-p` option specifies the "Reverse Interpolate Scale (RIS)" (if equal to 0, then RIS is disabled).
+The first and second parameters specify the paths to the image and the result {PNG}. The `-H`, `-W` and `-r` options set the resulting dimensions. If `-H` or `-W` is given, then `-r` is ignored. The `-m` option specifies the scaling method {0 - bicubic, 1 - biakima, -1 - biline, -2 - gsample}. The `-p` option specifies the "Reverse Interpolate Scale (RIS)" (if equal to 0, then RIS is disabled).
 ```shell
 ./stbresize -r 4 ${IMAGE_PATH} ${IMAGE_PATH}.out.png
 ```
@@ -47,6 +51,7 @@ The first and second parameters specify the paths to the image and the result {P
 - `biakima.h` - biakima image scaling
 - `bicubic.h` - bicubic image scaling
 - `biline.h` - biline image scaling
+- `gsample.h` - gsample image sampler
 - `image-stb.h` - API [stb](https://github.com/nothings/stb.git)
 - `ris.h` - Reverse Interpolate Scale (RIS): prefilter
 - `stb/` - [stb](https://github.com/nothings/stb.git)
