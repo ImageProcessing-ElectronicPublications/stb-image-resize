@@ -10,13 +10,15 @@
 #include "biline.h"
 #include "ris.h"
 
-#define RESIZE_VERSION "1.3"
+#define RESIZE_VERSION "1.4"
 
-void resize_usage(char* prog, float ratio, int method, float pris)
+void resize_usage(char* prog, int resize_height, int resize_width, float ratio, int method, float pris)
 {
     printf("StbResize version %s.\n", RESIZE_VERSION);
     printf("usage: %s [options] image_in out.png\n", prog);
     printf("options:\n");
+    printf("  -H NUM    resize height (default %d)\n", resize_height);
+    printf("  -W NUM    resize width (default %d)\n", resize_width);
     printf("  -m NUM    method: 0 - bicubic, 1 - biakima, -1 - biline (default %d)\n", method);
     printf("  -p N.M    part prefilter RIS (default %f)\n", pris);
     printf("  -r N.M    sample ratio (default %f)\n", ratio);
@@ -25,15 +27,22 @@ void resize_usage(char* prog, float ratio, int method, float pris)
 
 int main(int argc, char **argv)
 {
+    int resize_height = 0, resize_width = 0;
     float ratio = 1.0f;
     int method = 0;
     float pris = 0.0f, vris = 0.0f;
     int fhelp = 0;
     int opt;
-    while ((opt = getopt(argc, argv, ":m:p:r:h")) != -1)
+    while ((opt = getopt(argc, argv, ":H:W:m:p:r:h")) != -1)
     {
         switch(opt)
         {
+        case 'H':
+            resize_height = atoi(optarg);
+            break;
+        case 'W':
+            resize_width = atoi(optarg);
+            break;
         case 'm':
             method = atoi(optarg);
             break;
@@ -64,7 +73,7 @@ int main(int argc, char **argv)
     }
     if(optind + 2 > argc || fhelp)
     {
-        resize_usage(argv[0], ratio, method, pris);
+        resize_usage(argv[0], resize_height, resize_width, ratio, method, pris);
         return 0;
     }
     const char *src_name = argv[optind];
@@ -101,8 +110,29 @@ int main(int argc, char **argv)
     }
     stbi_image_free(img);
 
-    int resize_height = (int)((float)height * ratio + 0.5f);
-    int resize_width = (int)((float)width * ratio + 0.5f);
+    if ((resize_height == 0) && (resize_width == 0))
+    {
+        resize_height = (int)((float)height * ratio + 0.5f);
+        resize_width = (int)((float)width * ratio + 0.5f);
+    }
+    else
+    {
+        if (resize_height == 0)
+        {
+            ratio = (float)resize_width / (float)width;
+            resize_height = (int)((float)height * ratio + 0.5f);
+        }
+        if (resize_width == 0)
+        {
+            ratio = (float)resize_height / (float)height;
+            resize_width = (int)((float)width * ratio + 0.5f);
+        }
+    }
+    if ((resize_height == 0) || (resize_width == 0))
+    {
+        fprintf(stderr, "ERROR: bad target size %dx%d:%d\n", resize_width, resize_height, channels);
+        return 1;
+    }
     printf("resize: %dx%d:%d\n", resize_width, resize_height, channels);
 
     unsigned char *resize_data = NULL;

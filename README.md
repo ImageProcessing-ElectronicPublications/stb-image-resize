@@ -37,7 +37,7 @@ $ make
 ```
 ## use
 
-The first and second parameters specify the paths to the image and the result {PNG}. The third parameter specifies the scale of the image. The fourth specifies the scaling method {0 - bicubic, 1 - biakima, -1 - biline}.
+The first and second parameters specify the paths to the image and the result {PNG}. The `-H`, `-W` and `-r` options set the resulting dimensions. If `-H` or `-W` is given, then `-r` is ignored. The `-m` option specifies the scaling method {0 - bicubic, 1 - biakima, -1 - biline}. The `-p` option specifies the "Reverse Interpolate Scale (RIS)" (if equal to 0, then RIS is disabled).
 ```shell
 ./stbresize -r 4 ${IMAGE_PATH} ${IMAGE_PATH}.out.png
 ```
