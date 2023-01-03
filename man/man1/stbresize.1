@@ -1,4 +1,4 @@
-.TH "StbResize" 1 1.5 "2 Jan 2023" "User Manual"
+.TH "StbResize" 1 1.7 "3 Jan 2023" "User Manual"
 
 .SH NAME
 stbresize
@@ -11,6 +11,10 @@ The image is scaled using interpolation:
 
 The image is resampled using:
   - gsample (3x3)
+
+Include prefilter:
+  - Gauss (for downsample)
+  - "Reverse Interpolate Scale (RIS)"
 
 .SH SYNOPSIS
 stbresize [options] image_in out.png

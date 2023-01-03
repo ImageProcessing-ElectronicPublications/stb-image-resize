@@ -44,9 +44,8 @@ RISAPI float ImageReFilter(unsigned char *src, unsigned char *res, int height, i
             }
         }
     }
-    ims /= (float)height;
-    ims /= (float)width;
-    ims /= (float)channels;
+    ims /= (float)k;
+    ims /= 255.0f;
 
     return ims;
 }

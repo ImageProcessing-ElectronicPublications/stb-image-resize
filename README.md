@@ -8,7 +8,12 @@ The image is scaled using interpolation:
 
 The image is resampled using:
 
-  - gsample (3x3)
+- gsample (3x3)
+
+Include prefilter:
+
+- Gauss (for downsample)
+- "Reverse Interpolate Scale (RIS)"
 
 ## build
 
@@ -53,8 +58,9 @@ The first and second parameters specify the paths to the image and the result {P
 - `bicubic.h` - bicubic image scaling
 - `biline.h` - biline image scaling
 - `dependencies.c` - API [stb](https://github.com/nothings/stb.git)
+- `gauss.h` - prefilter: Gauss
 - `gsample.h` - gsample image sampler
-- `ris.h` - Reverse Interpolate Scale (RIS): prefilter
+- `ris.h` - prefilter: Reverse Interpolate Scale (RIS)
 - `stb/` - [stb](https://github.com/nothings/stb.git)
 - `stbresize.c` - CLI program.
 

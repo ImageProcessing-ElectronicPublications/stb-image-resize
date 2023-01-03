@@ -9,10 +9,11 @@
 #include "bicubic.h"
 #include "biakima.h"
 #include "biline.h"
-#include "ris.h"
 #include "gsample.h"
+#include "ris.h"
+#include "gauss.h"
 
-#define RESIZE_VERSION "1.6"
+#define RESIZE_VERSION "1.7"
 
 void resize_usage(char* prog, int resize_height, int resize_width, float ratio, int method, float pris)
 {
@@ -31,8 +32,8 @@ int main(int argc, char **argv)
 {
     int resize_height = 0, resize_width = 0;
     float ratio = 1.0f;
-    int method = 0;
-    float pris = 0.0f, vris = 0.0f;
+    int method = 0, gaussrx = 0, gaussry = 0;
+    float pris = 0.0f, vgauss, vris = 0.0f;
     int fhelp = 0;
     int opt;
     while ((opt = getopt(argc, argv, ":H:W:m:p:r:h")) != -1)
@@ -137,6 +138,15 @@ int main(int argc, char **argv)
     }
     printf("resize: %dx%d:%d\n", resize_width, resize_height, channels);
 
+    if ((resize_height < height) || (resize_width < width))
+    {
+        printf("prefilter: Gauss\n");
+        gaussry = (resize_height < height) ? (0.5f * (float)height / (float)resize_height) : 0.0f;
+        gaussrx = (resize_width < width) ? (0.5f * (float)width / (float)resize_width) : 0.0f;
+        vgauss = GaussBlurFilter(data, height, width, channels, gaussry, gaussrx);
+        printf("  gauss-value: %f\n", vgauss);
+    }
+
     unsigned char *resize_data = NULL;
     if (!(resize_data = (unsigned char*)malloc(resize_height * resize_width * channels * sizeof(unsigned char))))
     {
@@ -166,7 +176,7 @@ int main(int argc, char **argv)
 
     if (pris > 0.0f)
     {
-        printf("RIS prefilter... ");
+        printf("prefilter: RIS\n");
         unsigned char* ris_data = NULL;
         if (!(ris_data = (unsigned char*)malloc(height * width * channels * sizeof(unsigned char))))
         {
@@ -175,7 +185,7 @@ int main(int argc, char **argv)
         }
         ResizeImageGSample(resize_data, resize_height, resize_width, channels, height, width, ris_data);
         vris = ImageReFilter(data, ris_data, height, width, channels, pris);
-        printf(" value: %f\n", vris);
+        printf("  ris-value: %f\n", vris);
         if (method == -2)
         {
             ResizeImageGSample(ris_data, height, width, channels, resize_height, resize_width, resize_data);
