@@ -5,6 +5,22 @@ https://github.com/heptagonhust/bicubic-image-resize/issues/9
 #ifndef BICUBIC_H_
 #define BICUBIC_H_
 
+#ifdef BICUBIC_STATIC
+#define BICUBICAPI static
+#else
+#define BICUBICAPI extern
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+BICUBICAPI void ResizeImageBiCubic(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res);
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef BICUBIC_IMPLEMENTATION
+
 float BiCubicWeightCoeff(float x, float a)
 {
     if (x <= 1.0f)
@@ -71,7 +87,7 @@ void BiCubicFilter(unsigned char *pix, unsigned char *src, int height, int width
     }
 }
 
-void ResizeImageBiCubic(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
+BICUBICAPI void ResizeImageBiCubic(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
 {
     float ratio_height = (float)resize_height / (float)height;
     float ratio_width = (float)resize_width / (float)width;
@@ -93,5 +109,7 @@ void ResizeImageBiCubic(unsigned char *src, int height, int width, int channels,
         }
     }
 }
+
+#endif /* BICUBIC_IMPLEMENTATION */
 
 #endif /* BICUBIC_H_ */

@@ -4,14 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "image-stb.h"
+#include "stb/stb_image.h"
+#include "stb/stb_image_write.h"
 #include "bicubic.h"
 #include "biakima.h"
 #include "biline.h"
 #include "ris.h"
 #include "gsample.h"
 
-#define RESIZE_VERSION "1.5"
+#define RESIZE_VERSION "1.6"
 
 void resize_usage(char* prog, int resize_height, int resize_width, float ratio, int method, float pris)
 {

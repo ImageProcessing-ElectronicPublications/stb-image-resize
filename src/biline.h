@@ -5,6 +5,22 @@ https://github.com/heptagonhust/bicubic-image-resize/issues/9
 #ifndef BILINE_H_
 #define BILINE_H_
 
+#ifdef BILINE_STATIC
+#define BILINEAPI static
+#else
+#define BILINEAPI extern
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+BILINEAPI void ResizeImageBiLine(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res);
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef BILINE_IMPLEMENTATION
+
 void BiLineFilter(unsigned char *pix, unsigned char *src, int height, int width, int channels, float y, float x)
 {
     int d, xi, yi, xf, yf;
@@ -35,7 +51,7 @@ void BiLineFilter(unsigned char *pix, unsigned char *src, int height, int width,
     }
 }
 
-void ResizeImageBiLine(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
+BILINEAPI void ResizeImageBiLine(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
 {
     float ratio_height = (float)resize_height / (float)height;
     float ratio_width = (float)resize_width / (float)width;
@@ -57,5 +73,7 @@ void ResizeImageBiLine(unsigned char *src, int height, int width, int channels, 
         }
     }
 }
+
+#endif /* BILINE_IMPLEMENTATION */
 
 #endif /* BILINE_H_ */

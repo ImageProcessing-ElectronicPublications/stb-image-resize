@@ -6,7 +6,23 @@ https://github.com/ImageProcessing-ElectronicPublications/imthreshold
 #ifndef RIS_H_
 #define RIS_H_
 
-float ImageReFilter(unsigned char *src, unsigned char *res, int height, int width, int channels, float pris)
+#ifdef RIS_STATIC
+#define RISAPI static
+#else
+#define RISAPI extern
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+RISAPI float ImageReFilter(unsigned char *src, unsigned char *res, int height, int width, int channels, float pris);
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef RIS_IMPLEMENTATION
+
+RISAPI float ImageReFilter(unsigned char *src, unsigned char *res, int height, int width, int channels, float pris)
 {
     unsigned d;
     float im, imf, imd, ims = 0.0f;
@@ -34,5 +50,7 @@ float ImageReFilter(unsigned char *src, unsigned char *res, int height, int widt
 
     return ims;
 }
+
+#endif /* RIS_IMPLEMENTATION */
 
 #endif /* RIS_H_ */

@@ -5,7 +5,23 @@ https://github.com/heptagonhust/bicubic-image-resize/issues/9
 #ifndef GSAMPLE_H_
 #define GSAMPLE_H_
 
-void ResizeImageGSample(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
+#ifdef GSAMPLE_STATIC
+#define GSAMPLEAPI static
+#else
+#define GSAMPLEAPI extern
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+GSAMPLEAPI void ResizeImageGSample(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res);
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef GSAMPLE_IMPLEMENTATION
+
+GSAMPLEAPI void ResizeImageGSample(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
 {
     unsigned int d;
     float xFactor = (float)width / (float)resize_width;
@@ -155,5 +171,7 @@ void ResizeImageGSample(unsigned char *src, int height, int width, int channels,
         }
     }
 }
+
+#endif /* GSAMPLE_IMPLEMENTATION */
 
 #endif /* GSAMPLE_H_ */

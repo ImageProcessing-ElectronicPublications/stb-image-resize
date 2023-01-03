@@ -18,6 +18,7 @@ submodules:
 - [stb](https://github.com/nothings/stb.git) -> [src/stb](src/stb)
 
 ```shell
+$ git submodule init
 $ git submodule update
 ```
 
@@ -51,8 +52,8 @@ The first and second parameters specify the paths to the image and the result {P
 - `biakima.h` - biakima image scaling
 - `bicubic.h` - bicubic image scaling
 - `biline.h` - biline image scaling
+- `dependencies.c` - API [stb](https://github.com/nothings/stb.git)
 - `gsample.h` - gsample image sampler
-- `image-stb.h` - API [stb](https://github.com/nothings/stb.git)
 - `ris.h` - Reverse Interpolate Scale (RIS): prefilter
 - `stb/` - [stb](https://github.com/nothings/stb.git)
 - `stbresize.c` - CLI program.
@@ -69,3 +70,7 @@ After reading in the picture, a 3-channel pixel matrix is obtained, that is, the
 
 The layout of images in memory is shown in the figure:  
 ![RBGImage](images/data.png)
+
+---
+
+See [demo and compare](https://github.com/ImageProcessing-ElectronicPublications/stb-image-resize-demo).

@@ -5,6 +5,22 @@ https://github.com/heptagonhust/bicubic-image-resize/issues/10
 #ifndef BIAKIMA_H_
 #define BIAKIMA_H_
 
+#ifdef BIAKIMA_STATIC
+#define BIAKIMAAPI static
+#else
+#define BIAKIMAAPI extern
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+BIAKIMAAPI void ResizeImageBiAkima(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res);
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef BIAKIMA_IMPLEMENTATION
+
 void BiAkimaFilter(unsigned char *pix, unsigned char *src, int height, int width, int channels, float y, float x)
 {
     int i, j, d, xi, yi, xf, yf;
@@ -104,7 +120,7 @@ void BiAkimaFilter(unsigned char *pix, unsigned char *src, int height, int width
     }
 }
 
-void ResizeImageBiAkima(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
+BIAKIMAAPI void ResizeImageBiAkima(unsigned char *src, int height, int width, int channels, int resize_height, int resize_width, unsigned char *res)
 {
     float ratio_height = (float)resize_height / (float)height;
     float ratio_width = (float)resize_width / (float)width;
@@ -126,5 +142,7 @@ void ResizeImageBiAkima(unsigned char *src, int height, int width, int channels,
         }
     }
 }
+
+#endif /* BIAKIMA_IMPLEMENTATION */
 
 #endif /* BIAKIMA_H_ */
