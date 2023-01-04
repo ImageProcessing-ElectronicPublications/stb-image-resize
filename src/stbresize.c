@@ -138,7 +138,7 @@ int main(int argc, char **argv)
     }
     printf("resize: %dx%d:%d\n", resize_width, resize_height, channels);
 
-    if ((resize_height < height) || (resize_width < width))
+    if ((method > -2) && ((resize_height < height) || (resize_width < width)))
     {
         printf("prefilter: Gauss\n");
         gaussry = (resize_height < height) ? (0.5f * (float)height / (float)resize_height) : 0.0f;
