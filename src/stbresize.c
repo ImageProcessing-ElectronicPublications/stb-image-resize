@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "stb/stb_image.h"
-#include "stb/stb_image_write.h"
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
 #include "bicubic.h"
 #include "biakima.h"
 #include "biline.h"

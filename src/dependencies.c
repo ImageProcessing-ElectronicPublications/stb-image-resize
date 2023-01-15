@@ -6,8 +6,8 @@
 #define GSAMPLE_IMPLEMENTATION
 #define RIS_IMPLEMENTATION
 #define GAUSS_IMPLEMENTATION
-#include "stb/stb_image.h"
-#include "stb/stb_image_write.h"
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
 #include "biakima.h"
 #include "bicubic.h"
 #include "biline.h"

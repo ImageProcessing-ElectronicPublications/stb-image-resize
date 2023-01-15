@@ -5,6 +5,8 @@ https://github.com/heptagonhust/bicubic-image-resize/issues/9
 #ifndef GAUSS_H_
 #define GAUSS_H_
 
+#include <math.h>
+
 #ifdef GAUSS_STATIC
 #define GAUSSAPI static
 #else
