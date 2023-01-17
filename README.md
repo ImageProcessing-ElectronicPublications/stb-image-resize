@@ -60,6 +60,7 @@ The first and second parameters specify the paths to the image and the result {P
 - `dependencies.c` - API [stb](https://github.com/nothings/stb.git)
 - `gauss.h` - prefilter: Gauss
 - `gsample.h` - gsample image sampler
+- `hris.h` - HRIS/mean scale: Reverse Interpolate Scale (RIS)
 - `ris.h` - prefilter: Reverse Interpolate Scale (RIS)
 - `stb/` - [stb](https://github.com/nothings/stb.git)
 - `stbresize.c` - CLI program.

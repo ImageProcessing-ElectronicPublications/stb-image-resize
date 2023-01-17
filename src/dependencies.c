@@ -5,6 +5,7 @@
 #define BILINE_IMPLEMENTATION
 #define GSAMPLE_IMPLEMENTATION
 #define RIS_IMPLEMENTATION
+#define HRIS_IMPLEMENTATION
 #define GAUSS_IMPLEMENTATION
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
@@ -13,4 +14,5 @@
 #include "biline.h"
 #include "gsample.h"
 #include "ris.h"
+#include "hris.h"
 #include "gauss.h"
